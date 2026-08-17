@@ -145,6 +145,10 @@ func (s *server) listBlobs(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) handleBlobItem(w http.ResponseWriter, r *http.Request) {
 	name := strings.TrimPrefix(r.URL.Path, "/blobs/")
+	if name == "" {
+		writeJSON(w, http.StatusBadRequest, errMsg("missing blob name"))
+		return
+	}
 	switch r.Method {
 	case http.MethodGet:
 		s.getBlob(w, r, name)
